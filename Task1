@@ -1,0 +1,133 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SimpleBasicCalculator {
+    // List for storing calculation history
+    private static ArrayList<String> history = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean calculate = true;
+
+        while (calculate) {
+            System.out.println("Enter the first number: ");
+            double num1 = getValidNumber(scanner);
+            System.out.println("Enter the second number: ");
+            double num2 = getValidNumber(scanner);
+
+            // choosing an operation
+            System.out.println("Choose an operation: ");
+            System.out.println("1. Addition (+)");
+            System.out.println("2. Subtraction (-)");
+            System.out.println("3. Multiplication (*)");
+            System.out.println("4. Division (/)");
+            System.out.println("5. Power (^)");
+            System.out.println("6. Modulus (%)");
+            System.out.println("7. Square Root (√) - for the first number");
+            System.out.println("8. Factorial (!) - for the first number");
+            System.out.println("9. View Calculation History");
+            int choice = scanner.nextInt();
+
+            double result = 0;
+            boolean validOperation = true;
+            String operationString = "";
+
+            //logic of selected operations
+            switch (choice) {
+                case 1:
+                    result = num1 + num2;
+                    operationString = num1 + " + " + num2;
+                    break;
+                case 2:
+                    result = num1 - num2;
+                    operationString = num1 + " - " + num2;
+                    break;
+                case 3:
+                    result = num1 * num2;
+                    operationString = num1 + " * " + num2;
+                    break;
+                case 4:
+                    if (num2 != 0) {
+                        result = num1 / num2;
+                        operationString = num1 + " / " + num2;
+                    } else {
+                        System.out.println("Error: Cannot divide by zero!");
+                        validOperation = false;
+                    }
+                    break;
+                case 5:
+                    result = Math.pow(num1, num2);
+                    operationString = num1 + " ^ " + num2;
+                    break;
+                case 6:
+                    if (num2 != 0) {
+                        result = num1 % num2;
+                        operationString = num1 + " % " + num2;
+                    } else {
+                        System.out.println("Error: Cannot calculate modulus with zero!");
+                        validOperation = false;
+                    }
+                    break;
+                case 7:
+                    result = Math.sqrt(num1);
+                    operationString = "√" + num1;
+                    break;
+                case 8:
+                    result = factorial((int) num1);
+                    operationString = num1 + "!";
+                    break;
+                case 9:
+                    // Display calculation history
+                    displayHistory();
+                    validOperation = false;  // Skip result display for history
+                    break;
+                default:
+                    System.out.println("Error: Invalid operation choice!");
+                    validOperation = false;
+            }
+            // result 
+            if (validOperation) {
+                System.out.println("The result is: " + result);
+                history.add(operationString + " = " + result);
+            }
+            //performing another calculation
+            System.out.println("Do you want to perform another calculation? (yes/no)");
+            String toContinue = scanner.next();
+            if (toContinue.equalsIgnoreCase("no")) {
+                calculate = false;
+                System.out.println("EXIT");
+            }
+        }
+        scanner.close();
+    }
+    // Method to enter a  valid number
+    private static double getValidNumber(Scanner scanner) {
+        while (!scanner.hasNextDouble()) {
+            System.out.println("Please enter a valid number!");
+            scanner.next();
+        }
+        return scanner.nextDouble();
+    }
+    // Method to calculate factorial
+    private static long factorial(int num) {
+        if (num == 0 || num == 1) {
+            return 1;
+        }
+        long fact = 1;
+        for (int i = 2; i <= num; i++) {
+            fact *= i;
+        }
+        return fact;
+    }
+    // Method to display calculation history
+    private static void displayHistory() {
+        if (history.isEmpty()) {
+            System.out.println("There are no operations performed");
+        } else {
+            System.out.println("Your Calculation History:");
+            for (String record : history) {
+                System.out.println(record);
+            }
+        }
+    }
+}
